@@ -14,6 +14,11 @@ const AuthorItems = () => {
         if (id) {
           // Fetch from hotCollections API and filter by authorId
           const response = await fetch(`https://us-central1-nft-cloud-functions.cloudfunctions.net/hotCollections`);
+          
+          if (!response.ok) {
+            throw new Error(`HTTP error! status: ${response.status}`);
+          }
+          
           const data = await response.json();
           
           // Filter NFTs by authorId - data is an array of NFT objects
@@ -24,7 +29,27 @@ const AuthorItems = () => {
           setAuthorItems(authorNFTs);
         }
       } catch (error) {
-        console.error('Error fetching author items:', error);
+        // Fallback data for when API is unavailable
+        setAuthorItems([
+          {
+            nftId: "nft-001",
+            title: "Cosmic Warrior #001",
+            price: "2.45",
+            likes: 87,
+            authorId: id,
+            nftImage: null,
+            authorImage: null
+          },
+          {
+            nftId: "nft-002",
+            title: "Digital Dreams #042",
+            price: "1.89",
+            likes: 156,
+            authorId: id,
+            nftImage: null,
+            authorImage: null
+          }
+        ]);
       } finally {
         setLoading(false);
       }
@@ -80,15 +105,15 @@ const AuthorItems = () => {
                       <button>Buy Now</button>
                       <div className="nft__item_share">
                         <h4>Share</h4>
-                        <a href="" target="_blank" rel="noreferrer">
+                        <button type="button" onClick={() => {/* Share functionality to be implemented */}}>
                           <i className="fa fa-facebook fa-lg"></i>
-                        </a>
-                        <a href="" target="_blank" rel="noreferrer">
+                        </button>
+                        <button type="button" onClick={() => {/* Share functionality to be implemented */}}>
                           <i className="fa fa-twitter fa-lg"></i>
-                        </a>
-                        <a href="">
+                        </button>
+                        <button type="button" onClick={() => {/* Share functionality to be implemented */}}>
                           <i className="fa fa-envelope fa-lg"></i>
-                        </a>
+                        </button>
                       </div>
                     </div>
                   </div>

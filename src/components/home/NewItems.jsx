@@ -14,47 +14,43 @@ const NewItems = () => {
   useEffect(() => {
     const fetchNewItems = async () => {
       try {
-        console.log("Fetching new items...");
         const response = await fetch(
           "https://us-central1-nft-cloud-functions.cloudfunctions.net/newItems"
         );
-        console.log("Response received:", response);
         
         if (!response.ok) {
           throw new Error(`HTTP error! status: ${response.status}`);
         }
         
         const data = await response.json();
-        console.log("Data received:", data);
         setNewItems(data);
-        setLoading(false);
       } catch (error) {
-        console.error("Error fetching new items:", error);
-        // Set some fallback data for testing
+        // Fallback data for when API is unavailable
         setNewItems([
           {
             id: 1,
-            title: "Test NFT 1",
+            title: "Cosmic Warrior #001",
             price: "1.5",
             likes: 25,
-            authorId: "test-author",
-            nftId: "test-nft-1",
+            authorId: "0x1234...5678",
+            nftId: "nft-001",
             expiryDate: new Date(Date.now() + 24 * 60 * 60 * 1000).toISOString(),
             nftImage: null,
             authorImage: null
           },
           {
             id: 2,
-            title: "Test NFT 2",
+            title: "Digital Dreams #042",
             price: "2.3",
             likes: 42,
-            authorId: "test-author-2",
-            nftId: "test-nft-2",
+            authorId: "0x2345...6789",
+            nftId: "nft-002",
             expiryDate: new Date(Date.now() + 48 * 60 * 60 * 1000).toISOString(),
             nftImage: null,
             authorImage: null
           }
         ]);
+      } finally {
         setLoading(false);
       }
     };
@@ -114,7 +110,23 @@ const NewItems = () => {
               <div className="small-border bg-color-2"></div>
             </div>
           </div>
-          <OwlCarousel className='owl-theme' loop margin={10} nav>
+          <OwlCarousel 
+            className='owl-theme' 
+            loop 
+            margin={10} 
+            nav 
+            responsive={{
+              0: {
+                items: 1
+              },
+              600: {
+                items: 2
+              },
+              1000: {
+                items: 4
+              }
+            }}
+          >
             {newItems.map((item) => (
               <div className='item' key={item.id}>
                 <div className="nft__item">

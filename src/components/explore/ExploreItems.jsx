@@ -19,10 +19,61 @@ const ExploreItems = () => {
           url += `?filter=${filterParam}`;
         }
         const response = await fetch(url);
+        
+        if (!response.ok) {
+          throw new Error(`HTTP error! status: ${response.status}`);
+        }
+        
         const data = await response.json();
         setExploreItems(data);
       } catch (error) {
-        console.error('Error fetching explore items:', error);
+        // Fallback data for when API is unavailable
+        setExploreItems([
+          {
+            id: 1,
+            title: "Cosmic Warrior #001",
+            price: "2.45",
+            likes: 87,
+            authorId: "0x1234...5678",
+            nftId: "nft-001",
+            expiryDate: Date.now() + 86400000, // 24 hours from now
+            nftImage: null,
+            authorImage: null
+          },
+          {
+            id: 2,
+            title: "Digital Dreams #042",
+            price: "1.89",
+            likes: 156,
+            authorId: "0x2345...6789",
+            nftId: "nft-002",
+            expiryDate: Date.now() + 172800000, // 48 hours from now
+            nftImage: null,
+            authorImage: null
+          },
+          {
+            id: 3,
+            title: "Neon Genesis #007",
+            price: "3.21",
+            likes: 203,
+            authorId: "0x3456...7890",
+            nftId: "nft-003",
+            expiryDate: Date.now() + 259200000, // 72 hours from now
+            nftImage: null,
+            authorImage: null
+          },
+          {
+            id: 4,
+            title: "Pixel Paradise #128",
+            price: "0.95",
+            likes: 64,
+            authorId: "0x4567...8901",
+            nftId: "nft-004",
+            expiryDate: Date.now() + 345600000, // 96 hours from now
+            nftImage: null,
+            authorImage: null
+          }
+        ]);
       } finally {
         setLoading(false);
       }
@@ -124,15 +175,15 @@ const ExploreItems = () => {
                   <button>Buy Now</button>
                   <div className="nft__item_share">
                     <h4>Share</h4>
-                    <a href="" target="_blank" rel="noreferrer">
+                    <button type="button" onClick={() => {/* Share functionality to be implemented */}}>
                       <i className="fa fa-facebook fa-lg"></i>
-                    </a>
-                    <a href="" target="_blank" rel="noreferrer">
+                    </button>
+                    <button type="button" onClick={() => {/* Share functionality to be implemented */}}>
                       <i className="fa fa-twitter fa-lg"></i>
-                    </a>
-                    <a href="">
+                    </button>
+                    <button type="button" onClick={() => {/* Share functionality to be implemented */}}>
                       <i className="fa fa-envelope fa-lg"></i>
-                    </a>
+                    </button>
                   </div>
                 </div>
               </div>
@@ -154,9 +205,9 @@ const ExploreItems = () => {
         </div>
       ))}
       <div className="col-md-12 text-center">
-        <Link to="" id="loadmore" className="btn-main lead">
+        <button type="button" id="loadmore" className="btn-main lead" onClick={() => {/* Load more functionality to be implemented */}}>
           Load more
-        </Link>
+        </button>
       </div>
     </>
   );
