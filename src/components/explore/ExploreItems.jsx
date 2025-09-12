@@ -1,5 +1,9 @@
 import React, { useState, useEffect } from "react";
+ gibson-explore-items
 import { Link } from "react-router-dom";
+
+import { Link, useSearchParams } from "react-router-dom";
+ main
 import AuthorImage from "../../images/author_thumbnail.jpg";
 import nftImage from "../../images/nftImage.jpg";
 
@@ -7,6 +11,7 @@ const ExploreItems = () => {
   const [exploreItems, setExploreItems] = useState([]);
   const [loading, setLoading] = useState(true);
   const [filter, setFilter] = useState("");
+ gibson-explore-items
   const [visibleItems, setVisibleItems] = useState(8);
   const [currentTime, setCurrentTime] = useState(new Date().getTime());
 
@@ -46,10 +51,30 @@ const ExploreItems = () => {
             authorImage: null
           }
         ]);
+
+  const [searchParams, setSearchParams] = useSearchParams();
+  const [currentTime, setCurrentTime] = useState(Date.now());
+
+  useEffect(() => {
+    const fetchExploreItems = async (filterParam = '') => {
+      try {
+        setLoading(true);
+        let url = 'https://us-central1-nft-cloud-functions.cloudfunctions.net/explore';
+        if (filterParam) {
+          url += `?filter=${filterParam}`;
+        }
+        const response = await fetch(url);
+        const data = await response.json();
+        setExploreItems(data);
+      } catch (error) {
+        console.error('Error fetching explore items:', error);
+      } finally {
+ main
         setLoading(false);
       }
     };
 
+gibson-explore-items
     fetchExploreItems();
   }, [filter]);
 
@@ -57,11 +82,42 @@ const ExploreItems = () => {
   useEffect(() => {
     const timer = setInterval(() => {
       setCurrentTime(new Date().getTime());
+
+    // Check for filter parameter in URL
+    const urlFilter = searchParams.get('filter');
+    if (urlFilter) {
+      setFilter(urlFilter);
+      fetchExploreItems(urlFilter);
+    } else {
+      fetchExploreItems();
+    }
+  }, [searchParams]);
+
+  // Update timer every second
+  useEffect(() => {
+    const timer = setInterval(() => {
+      setCurrentTime(Date.now());
+ main
     }, 1000);
 
     return () => clearInterval(timer);
   }, []);
 
+gibson-explore-items
+
+  const handleFilterChange = (e) => {
+    const selectedFilter = e.target.value;
+    setFilter(selectedFilter);
+    
+    // Update URL parameters
+    if (selectedFilter) {
+      setSearchParams({ filter: selectedFilter });
+    } else {
+      setSearchParams({});
+    }
+  };
+
+ main
   const formatTimeLeft = (expiryDate) => {
     const timeLeft = expiryDate - currentTime;
     
@@ -75,6 +131,7 @@ const ExploreItems = () => {
     const seconds = Math.floor((timeLeft % (1000 * 60)) / 1000);
     
     if (days > 0) {
+gibson-explore-items
       return `${days}d ${hours}h ${minutes}m ${seconds}s`;
     }
     return `${hours}h ${minutes}m ${seconds}s`;
@@ -93,11 +150,18 @@ const ExploreItems = () => {
 
   const loadMore = () => {
     setVisibleItems(prev => prev + 4);
+
+      return `${days}d ${hours}h ${minutes}m`;
+    } else {
+      return `${hours}h ${minutes}m ${seconds}s`;
+    }
+main
   };
 
   if (loading) {
     return (
       <>
+ gibson-explore-items
         <div>
           <select id="filter-items" defaultValue="">
             <option value="">Default</option>
@@ -106,6 +170,8 @@ const ExploreItems = () => {
             <option value="likes_high_to_low">Most liked</option>
           </select>
         </div>
+
+ main
         <div className="col-md-12 text-center">
           <p>Loading explore items...</p>
         </div>
@@ -113,9 +179,12 @@ const ExploreItems = () => {
     );
   }
 
+gibson-explore-items
   const sortedItems = getSortedItems();
   const itemsToShow = sortedItems.slice(0, visibleItems);
 
+
+ main
   return (
     <>
       <div>
@@ -126,9 +195,15 @@ const ExploreItems = () => {
           <option value="likes_high_to_low">Most liked</option>
         </select>
       </div>
+ gibson-explore-items
       {itemsToShow.map((item, index) => (
         <div
           key={item.id}
+
+      {exploreItems.map((item, index) => (
+        <div
+          key={item.id || index}
+main
           className="d-item col-lg-3 col-md-6 col-sm-6 col-xs-12"
           style={{ display: "block", backgroundSize: "cover" }}
         >
@@ -138,12 +213,17 @@ const ExploreItems = () => {
                 to={`/author/${item.authorId}`}
                 data-bs-toggle="tooltip"
                 data-bs-placement="top"
+                title={`Creator: ${item.authorId}`}
               >
+ gibson-explore-items
                 <img 
                   className="lazy" 
                   src={item.authorImage || AuthorImage} 
                   alt="Author" 
                 />
+
+                <img className="lazy" src={item.authorImage || AuthorImage} alt="" />
+ main
                 <i className="fa fa-check"></i>
               </Link>
             </div>
@@ -168,11 +248,14 @@ const ExploreItems = () => {
                 </div>
               </div>
               <Link to={`/item-details/${item.nftId}`}>
+ gibson-explore-items
                 <img 
                   src={item.nftImage || nftImage} 
                   className="lazy nft__item_preview" 
                   alt={item.title} 
                 />
+                <img src={item.nftImage || nftImage} className="lazy nft__item_preview" alt={item.title} />
+ main
               </Link>
             </div>
             <div className="nft__item_info">

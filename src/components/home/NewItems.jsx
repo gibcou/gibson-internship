@@ -9,6 +9,7 @@ import nftImage from "../../images/nftImage.jpg";
 const NewItems = () => {
   const [newItems, setNewItems] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [currentTime, setCurrentTime] = useState(Date.now());
 
   useEffect(() => {
     const fetchNewItems = async () => {
@@ -61,10 +62,18 @@ const NewItems = () => {
     fetchNewItems();
   }, []);
 
+  // Update timer every second
+  useEffect(() => {
+    const timer = setInterval(() => {
+      setCurrentTime(Date.now());
+    }, 1000);
+
+    return () => clearInterval(timer);
+  }, []);
+
   const formatTimeLeft = (expiryDate) => {
-    const now = new Date().getTime();
     const expiry = new Date(expiryDate).getTime();
-    const timeLeft = expiry - now;
+    const timeLeft = expiry - currentTime;
 
     if (timeLeft <= 0) {
       return "Expired";
@@ -100,7 +109,7 @@ const NewItems = () => {
       <div className="container">
         <div className="row">
           <div className="col-lg-12">
-            <div className="text-center">
+            <div className="text-center animated fadeInDownRight">
               <h2>New Items</h2>
               <div className="small-border bg-color-2"></div>
             </div>

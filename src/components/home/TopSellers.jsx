@@ -9,6 +9,7 @@ const TopSellers = () => {
   useEffect(() => {
     const fetchTopSellers = async () => {
       try {
+ gibson-explore-items
         console.log("Fetching top sellers...");
         const response = await fetch(
           "https://us-central1-nft-cloud-functions.cloudfunctions.net/topSellers"
@@ -42,6 +43,14 @@ const TopSellers = () => {
             price: 2.1
           }
         ]);
+=======
+        const response = await fetch('https://us-central1-nft-cloud-functions.cloudfunctions.net/topSellers');
+        const data = await response.json();
+        setTopSellers(data);
+        setLoading(false);
+      } catch (error) {
+        console.error('Error fetching top sellers:', error);
+main
         setLoading(false);
       }
     };
@@ -58,7 +67,11 @@ const TopSellers = () => {
               <div className="text-center">
                 <h2>Top Sellers</h2>
                 <div className="small-border bg-color-2"></div>
+ gibson-explore-items
                 <p>Loading top sellers...</p>
+=======
+                <p>Loading...</p>
+ main
               </div>
             </div>
           </div>
@@ -79,8 +92,13 @@ const TopSellers = () => {
           </div>
           <div className="col-md-12">
             <ol className="author_list">
+ gibson-explore-items
               {topSellers.map((seller, index) => (
                 <li key={seller.id || index}>
+=======
+              {topSellers.map((seller) => (
+                <li key={seller.id}>
+ main
                   <div className="author_list_pp">
                     <Link to={`/author/${seller.authorId}`}>
                       <img
