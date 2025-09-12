@@ -8,6 +8,7 @@ const ExploreItems = () => {
   const [loading, setLoading] = useState(true);
   const [filter, setFilter] = useState("");
   const [searchParams, setSearchParams] = useSearchParams();
+  const [currentTime, setCurrentTime] = useState(Date.now());
 
   useEffect(() => {
     const fetchExploreItems = async (filterParam = '') => {
@@ -37,6 +38,15 @@ const ExploreItems = () => {
     }
   }, [searchParams]);
 
+  // Update timer every second
+  useEffect(() => {
+    const timer = setInterval(() => {
+      setCurrentTime(Date.now());
+    }, 1000);
+
+    return () => clearInterval(timer);
+  }, []);
+
   const handleFilterChange = (e) => {
     const selectedFilter = e.target.value;
     setFilter(selectedFilter);
@@ -50,8 +60,7 @@ const ExploreItems = () => {
   };
 
   const formatTimeLeft = (expiryDate) => {
-    const now = new Date().getTime();
-    const timeLeft = expiryDate - now;
+    const timeLeft = expiryDate - currentTime;
     
     if (timeLeft <= 0) {
       return "Expired";

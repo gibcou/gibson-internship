@@ -15,20 +15,9 @@ const ItemDetails = () => {
     const fetchItemDetails = async () => {
       if (id) {
         try {
-          const response = await fetch(`https://us-central1-nft-cloud-functions.cloudfunctions.net/hotCollections`);
+          const response = await fetch(`https://us-central1-nft-cloud-functions.cloudfunctions.net/itemDetails?nftId=${id}`);
           const data = await response.json();
-          // Find the item with matching nftId from any collection
-          let foundItem = null;
-          for (const collection of data) {
-            if (collection.nftCollection) {
-              foundItem = collection.nftCollection.find(item => item.nftId.toString() === id);
-              if (foundItem) {
-                foundItem.authorName = collection.authorName;
-                break;
-              }
-            }
-          }
-          setItemData(foundItem);
+          setItemData(data);
         } catch (error) {
           console.error('Error fetching item details:', error);
         }
@@ -108,22 +97,20 @@ const ItemDetails = () => {
                     </div>
                   </div>
                   <p>
-                    doloremque laudantium, totam rem aperiam, eaque ipsa quae ab
-                    illo inventore veritatis et quasi architecto beatae vitae
-                    dicta sunt explicabo.
+                    {itemData.description || 'doloremque laudantium, totam rem aperiam, eaque ipsa quae ab illo inventore veritatis et quasi architecto beatae vitae dicta sunt explicabo.'}
                   </p>
                   <div className="d-flex flex-row">
                     <div className="mr40">
                       <h6>Owner</h6>
                       <div className="item_author">
                         <div className="author_list_pp">
-                        <Link to={`/author/${itemData.authorId}`}>
-                          <img className="lazy" src={itemData.authorImage || AuthorImage} alt="" />
+                        <Link to={`/author/${itemData.ownerId}`}>
+                          <img className="lazy" src={itemData.ownerImage || AuthorImage} alt="" />
                           <i className="fa fa-check"></i>
                         </Link>
                       </div>
                       <div className="author_list_info">
-                        <Link to={`/author/${itemData.authorId}`}>{itemData.authorName || 'Unknown Artist'}</Link>
+                        <Link to={`/author/${itemData.ownerId}`}>{itemData.ownerName || 'Unknown Artist'}</Link>
                       </div>
                       </div>
                     </div>
@@ -134,13 +121,13 @@ const ItemDetails = () => {
                       <h6>Creator</h6>
                       <div className="item_author">
                         <div className="author_list_pp">
-                          <Link to={`/author/${itemData.authorId}`}>
-                          <img className="lazy" src={itemData.authorImage || AuthorImage} alt="" />
+                          <Link to={`/author/${itemData.ownerId}`}>
+                          <img className="lazy" src={itemData.ownerImage || AuthorImage} alt="" />
                           <i className="fa fa-check"></i>
                         </Link>
                       </div>
                       <div className="author_list_info">
-                        <Link to={`/author/${itemData.authorId}`}>{itemData.authorName || 'Unknown Artist'}</Link>
+                        <Link to={`/author/${itemData.ownerId}`}>{itemData.ownerName || 'Unknown Artist'}</Link>
                         </div>
                       </div>
                     </div>
