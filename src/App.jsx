@@ -14,7 +14,7 @@ function App() {
   }, []);
 
   return (
-    <Router>
+    <Router basename="/gibson-internship">
       <Nav />
       <Routes>
         <Route path="/" element={<Home />} />
@@ -23,6 +23,7 @@ function App() {
         <Route path="/author/:id" element={<Author />} />
         <Route path="/item-details" element={<ItemDetails />} />
         <Route path="/item-details/:id" element={<ItemDetails />} />
+        <Route path="*" element={<Home />} />
       </Routes>
       <Footer />
     </Router>
